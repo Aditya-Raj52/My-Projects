@@ -1,0 +1,108 @@
+* {
+margin: 0;
+padding: 0;
+}
+
+.image {
+height: 810px;
+width: 1600px;
+background-image: url(https://papers.co/wallpaper/papers.co-hf26-ironman-avengers-art-robert-downey-jr-film-hero-35-3840x2160-4k-wallpaper.jpg);
+background-size: 100%;
+position: fixed;
+filter: blur(5px);
+
+}
+
+.fav {
+width: 90vw;
+height: 56vh;
+object-fit: cover;
+object-position: top;
+align-self: center;
+}
+.quotes {
+padding: 10px;
+}
+h1 {
+color: rgb(245, 15, 15);
+text-align: center;
+font-size: 70px;
+font-family: "Dela Gothic One", sans-serif;
+font-weight: 400;
+font-style: normal;
+}
+h6 {
+font-size: 20px;
+color: rgba(211, 180, 4, 0.997);
+text-align: center;
+font-family: "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+main {
+position: relative;
+padding: 15px;
+}
+.body{
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+.body .data{
+margin: auto;
+position: relative;
+height: 1315px;
+width: 75vw;
+background-color: rgba(255, 255, 255, 0.359);
+border-radius: 10px;
+padding: 20px;
+font-size: 25px;
+box-shadow: 9px 3px 20px 2px rgba(126, 114, 49, 1);
+}
+.body img {
+margin: 12px;
+padding: 10px;
+mix-blend-mode:hard-light;
+transform: scale(1.19);
+
+}
+.heading{
+font-family: "Merriweather", serif;
+font-weight: 900;
+font-style: normal;
+text-decoration: underline;
+margin: auto;
+
+}
+li {
+text-align: justify;
+font-family: "Roboto Slab", serif;
+font-optical-sizing: auto;
+font-weight: 400;
+font-style: normal;
+
+}
+h2{
+text-align: center;
+padding-bottom: 20px;
+}
+.linked{
+text-decoration: none;
+color: red;
+font-weight: 400;
+font-family: "Dela Gothic One", sans-serif;
+
+
+}
+.final{
+padding: 20px;
+margin-top : 10px;
+margin-bottom: 10px;
+margin-left: 5px;
+margin-right: 5px;
+text-align: center;
+color: aliceblue;
+}
+
+.name{
+text-decoration: none;
+color: burlywood;
+}
