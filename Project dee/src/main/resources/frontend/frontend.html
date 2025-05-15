@@ -1,0 +1,159 @@
+
+<!-- templates/login.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Period Tracker - Login</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body class="auth-page">
+    <div class="auth-container">
+        <div class="logo-container">
+            <h1>Period Tracker</h1>
+            <p>Track your cycle, understand your body</p>
+        </div>
+        
+        <form th:action="@{/login}" method="post" class="auth-form">
+            <div th:if="${param.error}" class="alert alert-error">
+                Invalid username or password.
+            </div>
+            <div th:if="${param.logout}" class="alert alert-success">
+                You have been logged out.
+            </div>
+            
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="button primary">Login</button>
+                <a th:href="@{/register}" class="button link">Create Account</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+
+
+<!-- templates/cycles.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Period Tracker - My Cycles</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Period Tracker</div>
+            <ul>
+                <li><a th:href="@{/}">Home</a></li>
+                <li><a th:href="@{/cycles}" class="active">My Cycles</a></li>
+                <li><a th:href="@{/cycles/calendar}">Calendar</a></li>
+                <li><a th:href="@{/logout}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="cycle-info">
+            <h1>My Cycles</h1>
+            
+            <div class="predictions">
+                <div class="prediction-card">
+                    <h3>Next Period</h3>
+                    <p class="date" th:text="${#temporals.format(nextPeriod, 'MMMM d, yyyy')}">June 15, 2023</p>
+                    <p class="subtext" th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), nextPeriod)} + ' days from now'">14 days from now</p>
+                </div>
+                
+                <div class="prediction-card">
+                    <h3>Ovulation</h3>
+                    <p class="date" th:text="${#temporals.format(ovulation, 'MMMM d, yyyy')}">June 1, 2023</p>
+                    <p class="subtext" th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), ovulation)} + ' days from now'">7 days from now</p>
+                </div>
+                
+                <div class="prediction-card">
+                    <h3>Fertile Window</h3>
+                    <p class="date" th:text="${#temporals.format(fertileWindow.get(0), 'MMM d')} + ' - ' + ${#temporals.format(fertileWindow.get(fertileWindow.size() - 1), 'MMM d')}">May 27 - June 1</p>
+                </div>
+            </div>
+            
+            <div class="add-cycle">
+                <h2>Log New Period</h2>
+                <form th:action="@{/cycles}" th:object="${newCycle}" method="post">
+                    <div class="form-group">
+                        <label for="startDate">Start Date</label>
+                        <input type="date" id="startDate" th:field="*{startDate}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="endDate">End Date (optional)</label>
+                        <input type="date" id="endDate" th:field="*{endDate}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="flowIntensity">Flow Intensity (1-5)</label>
+                        <select id="flowIntensity" th:field="*{flowIntensity}">
+                            <option value="1">1 - Very Light</option>
+                            <option value="2">2 - Light</option>
+                            <option value="3">3 - Moderate</option>
+                            <option value="4">4 - Heavy</option>
+                            <option value="5">5 - Very Heavy</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="button primary">Save</button>
+                </form>
+            </div>
+            
+            <div class="cycle-history">
+                <h2>Cycle History</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Duration</th>
+                                <th>Cycle Length</th>
+                                <th>Flow</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="cycle, iterStat : ${cycles}">
+                                <td th:text="${#temporals.format(cycle.startDate, 'MMM d, yyyy')}">May 18, 2023</td>
+                                <td th:text="${cycle.endDate != null ? #temporals.format(cycle.endDate, 'MMM d, yyyy') : 'In progress'}">May 23, 2023</td>
+                                <td th:text="${cycle.endDate != null ? T(java.time.temporal.ChronoUnit).DAYS.between(cycle.startDate, cycle.endDate) + 1 + ' days' : 'In progress'}">6 days</td>
+                                <td th:text="${iterStat.index < cycles.size() - 1 ? T(java.time.temporal.ChronoUnit).DAYS.between(cycles[iterStat.index + 1].startDate, cycle.startDate) + ' days' : 'N/A'}">28 days</td>
+                                <td th:text="${cycle.flowIntensity != null ? cycle.flowIntensity + '/5' : 'N/A'}">3/5</td>
+                                <td>
+                                    <a th:href="@{/cycles/{id}/edit(id=${cycle.id})}" class="button small">Edit</a>
+                                    <a th:href="@{/cycles/{id}/symptoms(id=${cycle.id})}" class="button small secondary">Symptoms</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Period Tracker App</p>
+    </footer>
+    
+    <script src="/js/main.js"></script>
+</body>
+</html>
+
+

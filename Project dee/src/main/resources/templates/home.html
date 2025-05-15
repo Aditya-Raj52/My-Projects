@@ -1,0 +1,59 @@
+<!-- templates/home.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Period Tracker - Home</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Period Tracker</div>
+            <ul>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="cycles.html" class="active">My Cycles</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a th:href="@{/logout}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="welcome">
+            <h1>Welcome <span th:text="${user.username}">User</span>!</h1>
+            <div class="summary-card">
+                <h2>Your Cycle Overview</h2>
+                <div class="next-period">
+                    <h3>Next Period:</h3>
+                    <p th:text="${#temporals.format(nextPeriod, 'MMMM d, yyyy')}">June 15, 2023</p>
+                    <p class="days-until" th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), nextPeriod)} + ' days from now'">14 days from now</p>
+                </div>
+                
+                <div class="cycle-status">
+                    <h3>Cycle Day:</h3>
+                    <p th:text="${cycleDay}">Day 14</p>
+                </div>
+                
+                <div class="fertility-window">
+                    <h3>Fertility Window:</h3>
+                    <p th:if="${inFertileWindow}" class="highlight">Currently in fertile window</p>
+                    <p th:unless="${inFertileWindow}" th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), fertileWindow.get(0))} + ' days until fertile window'">7 days until fertile window</p>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <a th:href="@{/cycles/add}" class="button primary">Log Period</a>
+                <a th:href="@{/symptoms/add}" class="button secondary">Log Symptoms</a>
+                <a th:href="@{/cycles/calendar}" class="button tertiary">View Calendar</a>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Period Tracker App</p>
+    </footer>
+    
+    <script src="C:\Users\aarav\OneDrive\Desktop\Project dee\src\main\resources\static\js\main.js"></script>
+</body>
+</html>
